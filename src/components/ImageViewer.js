@@ -11,11 +11,25 @@ export default class ImageViewer{
         this.render()
     }
     
-    render(){
-        if(!this.$data.visibility){
-            this.$imageViewer.style.display = "none";
+    setVisibility(isVisible) {
+        if(isVisible){
+            this.$imageViewer.style.display = "block"
+        }else{
+            this.$imageViewer.style.display = "none"
         }
-        this.$breadcrumb.innerHTML = ` <div class="content">
-        <img src="${item.filePath}"></div>`
+    }
+
+    render(){
+        this.setVisibility(this.$data.visibility)
+        this.$imageViewer.innerHTML = ` <div class="content">
+        <img src="https://fe-dev-matching-2021-03-serverlessdeploymentbuck-t3kpj3way537.s3.ap-northeast-2.amazonaws.com/public${this.$data.item.filePath}"></div>`
+        
+         //close from esc
+      window.onkeyup = (e) => {
+        if(e.key === "Escape"){
+            this.setVisibility(false)
+        }
+      }
+    
     }
 }

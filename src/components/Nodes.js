@@ -1,4 +1,5 @@
 import {api} from "../api/api-cats.js"
+import ImageViewer from "./ImageViewer.js";
 import Node from "./Node.js"
 export default class Nodes {
     $target = null;
@@ -6,6 +7,7 @@ export default class Nodes {
     constructor(target, directories) {
         this.$target = target
         this.$directories = directories
+       
         const $nodes = document.createElement("section")
         $nodes.className = "Nodes"
         this.$nodes = $nodes
@@ -17,10 +19,14 @@ export default class Nodes {
     renderDirectories(){
         this.$directories.forEach((item) => {
             new Node(this.$nodes, item, ()=>{
-                api.fetchDirectory(item.id).then((response) =>{
-                    console.log("response=== " + JSON.stringify(response))
-                    this.setDirectories(response);
-                })
+                if(item.type == "DIRECTORY"){
+                    api.fetchDirectory(item.id).then((response) =>{
+                        console.log("response=== " + JSON.stringify(response))
+                        this.setDirectories(response);
+                    })
+                }else if(item.type ="FILE"){
+                    new ImageViewer(document.getElementById("App"), {visibility:true, item: item});
+                }
             })
         })
     }
@@ -31,7 +37,10 @@ export default class Nodes {
             const element = document.createElement("img")
             element.src = `./assets/prev.png`
             element.addEventListener("click", ()=>{
-                
+                console.log(JSON.stringify(directories[0].parent.id))
+                api.fetchDirectories().then((res) => {
+                  this.setDirectories(res)
+                })
             })
             this.$nodes.appendChild(element)
         }

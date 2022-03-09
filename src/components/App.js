@@ -12,9 +12,12 @@ export default class App {
   constructor($target) {
     this.$target = $target;
     this.$Breadcrumb = new Breadcrumb($target);
+    
+  
 
     api.fetchDirectories().then((response) => {
       this.$Nodes = new Nodes(this.$target, response);
+     
     })
 
 
